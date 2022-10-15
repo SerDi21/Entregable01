@@ -45,24 +45,34 @@ def read_data(f: TextIO) -> tuple[UndirectedGraph[Vertex], int, int]:
 
 
 def process(lab: UndirectedGraph[Vertex], rows: int, cols: int) -> tuple[Optional[Edge], int, int]:
-    final: Vertex= rows-1,cols-1
-    e=bf_search(lab,(0,0),final)
-    s=bf_search(lab,final,(0,0))
-    len_bf:int= e.get(final)
-    fn_len=len_bf
+    final: Vertex = rows-1, cols-1
+    e = bf_search(lab, (0, 0), final)
+    s = bf_search(lab, final, (0, 0))
+    len_bf: int = e.get(final)
+    fn_len = len_bf
     edge = ((0, 0), (0, 0))
     for r in range(rows):
         for c in range(cols):
             if e.get((r, c)) is not None and s.get((r+1, c)) is not None:
                 suma1 = e.get((r, c)) + s.get((r + 1, c)) + 1
-                if suma1<fn_len:
+                if suma1 < fn_len or (suma1 == fn_len and edge > ((r, c), (r+1, c))):
                     fn_len = suma1
-                    edge = ((r,c),(r+1,c))
+                    edge = ((r, c), (r+1, c))
             if e.get((r, c)) is not None and s.get((r, c+1)) is not None:
-                suma2 = e.get((r, c)) + s.get((r, c + 1)) +1
-                if suma2<fn_len:
+                suma2 = e.get((r, c)) + s.get((r, c + 1)) + 1
+                if suma2 < fn_len or (suma2 == fn_len and edge > ((r, c), (r, c+1))):
                     fn_len = suma2
-                    edge = ((r,c),(r,c+1))
+                    edge = ((r, c), (r, c+1))
+            if e.get((r, c)) is not None and s.get((r-1, c)) is not None:
+                suma3 = e.get((r, c)) + s.get((r - 1, c)) + 1
+                if suma3 < fn_len or (suma3 == fn_len and edge > ((r, c), (r-1, c))):
+                    fn_len = suma3
+                    edge = ((r-1, c), (r, c))
+            if e.get((r, c)) is not None and s.get((r, c-1)) is not None:
+                suma4 = e.get((r, c)) + s.get((r, c - 1)) + 1
+                if suma4 < fn_len or (suma4 == fn_len and edge > ((r, c), (r, c-1))):
+                    fn_len = suma4
+                    edge = ((r, c-1), (r, c))
     if edge == ((0, 0), (0, 0)):
         return None, len_bf, len_bf
     return edge, len_bf, fn_len
