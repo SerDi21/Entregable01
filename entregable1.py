@@ -54,16 +54,15 @@ def process(lab: UndirectedGraph[Vertex], rows: int, cols: int) -> tuple[Optiona
     for r in range(rows):
         for c in range(cols):
             if e.get((r, c)) is not None and s.get((r+1, c)) is not None:
-                suma1 = e.get((r, c)) + s.get((r + 1, c))
+                suma1 = e.get((r, c)) + s.get((r + 1, c)) + 1
                 if suma1<fn_len:
                     fn_len = suma1
                     edge = ((r,c),(r+1,c))
             if e.get((r, c)) is not None and s.get((r, c+1)) is not None:
-                suma2 = e.get((r, c)) + s.get((r, c + 1))
+                suma2 = e.get((r, c)) + s.get((r, c + 1)) +1
                 if suma2<fn_len:
                     fn_len = suma2
                     edge = ((r,c),(r,c+1))
-    print(fn_len)
     if edge == ((0, 0), (0, 0)):
         return None, len_bf, len_bf
     return edge, len_bf, fn_len
@@ -93,7 +92,7 @@ def show_results(edge_to_add: Optional[Edge], length_before: int, length_after: 
     if edge_to_add is None:
         print(NO_VALID_WALL)
     else:
-        print(edge_to_add)
+        print(edge_to_add[0][0], edge_to_add[0][1], edge_to_add[1][0], edge_to_add[1][1])
     print(length_before)
     print(length_after)
 
